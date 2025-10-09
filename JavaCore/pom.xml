@@ -10,6 +10,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>LinkedList</module>
+        <module>SalesAndCustomer</module>
     </modules>
 
     <properties>
