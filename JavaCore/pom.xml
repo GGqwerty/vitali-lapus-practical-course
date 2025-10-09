@@ -11,6 +11,7 @@
     <modules>
         <module>LinkedList</module>
         <module>SalesAndCustomer</module>
+        <module>Skynet</module>
     </modules>
 
     <properties>
