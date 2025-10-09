@@ -151,6 +151,7 @@ class CustomLinkedListTest {
         list.addFirst(0);
         list.remove(2);
         list.add(2, 5);
+
         assertEquals(4, list.size());
         assertEquals(0, list.get(0));
         assertEquals(1, list.get(1));
