@@ -12,6 +12,7 @@
         <module>LinkedList</module>
         <module>SalesAndCustomer</module>
         <module>Skynet</module>
+        <module>MiniSpring</module>
     </modules>
 
     <properties>
