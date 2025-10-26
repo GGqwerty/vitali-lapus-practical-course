@@ -1,0 +1,17 @@
+server:
+  port: 8080
+
+spring:
+  redis:
+    host: localhost
+    port: 6379
+  cache:
+    type: redis
+  liquibase:
+    enabled: true
+    change-log: db/changelog/changelog-master.yml
+  datasource:
+    url: jdbc:postgresql://localhost:5432/inno
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
