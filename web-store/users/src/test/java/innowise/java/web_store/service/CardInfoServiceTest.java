@@ -2,8 +2,8 @@ package innowise.java.web_store.service;
 
 import innowise.java.web_store.dto.request.CardInfoRequest;
 import innowise.java.web_store.dto.response.CardInfoResponse;
-import innowise.java.web_store.entity.CardInfoEntity;
-import innowise.java.web_store.entity.UserEntity;
+import innowise.java.web_store.entity.CardInfo;
+import innowise.java.web_store.entity.User;
 import innowise.java.web_store.exception.ApiException;
 import innowise.java.web_store.mapper.CardInfoMapper;
 import innowise.java.web_store.repository.CardInfoRepository;
@@ -38,7 +38,7 @@ class CardInfoServiceTest {
 
     @Test
     void getCardById_found() {
-        CardInfoEntity entity = new CardInfoEntity();
+        CardInfo entity = new CardInfo();
         entity.setId(1L);
 
         CardInfoResponse dto = new CardInfoResponse();
@@ -59,14 +59,14 @@ class CardInfoServiceTest {
 
     @Test
     void getAllCards_withPagination() {
-        CardInfoEntity e1 = new CardInfoEntity();
+        CardInfo e1 = new CardInfo();
         e1.setId(1L);
-        CardInfoEntity e2 = new CardInfoEntity();
+        CardInfo e2 = new CardInfo();
         e2.setId(2L);
 
-        List<CardInfoEntity> list = Arrays.asList(e1, e2);
+        List<CardInfo> list = Arrays.asList(e1, e2);
         Pageable pageable = PageRequest.of(0, 2, Sort.by("expirationDate").ascending());
-        Page<CardInfoEntity> page = new PageImpl<>(list, pageable, list.size());
+        Page<CardInfo> page = new PageImpl<>(list, pageable, list.size());
 
         when(cardRepository.findAllByOrderByExpirationDateAscHolderAsc(pageable)).thenReturn(page);
         when(cardInfoMapper.toDTO(e1)).thenReturn(new CardInfoResponse(){ { setId(1L); } });
@@ -84,10 +84,10 @@ class CardInfoServiceTest {
         request.setNumber("1234");
         request.setExpirationDate(LocalDate.of(2030,1,1));
 
-        UserEntity user = new UserEntity();
+        User user = new User();
         user.setId(1L);
 
-        CardInfoEntity entity = new CardInfoEntity();
+        CardInfo entity = new CardInfo();
         entity.setId(1L);
         entity.setUser(user);
 

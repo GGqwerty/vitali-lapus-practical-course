@@ -2,13 +2,10 @@ package innowise.java.web_store.mapper;
 
 import innowise.java.web_store.dto.request.CardInfoRequest;
 import innowise.java.web_store.dto.response.CardInfoResponse;
-import innowise.java.web_store.entity.CardInfoEntity;
-import org.mapstruct.BeanMapping;
+import innowise.java.web_store.entity.CardInfo;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 
 @Mapper(
@@ -18,7 +15,7 @@ import org.mapstruct.ReportingPolicy;
 )
 public interface CardInfoMapper {
 
-    CardInfoEntity toEntity(CardInfoRequest dto);
+    CardInfo toEntity(CardInfoRequest dto);
 
-    CardInfoResponse toDTO(CardInfoEntity entity);
+    CardInfoResponse toDTO(CardInfo entity);
 }

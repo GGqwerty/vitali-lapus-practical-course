@@ -2,7 +2,7 @@ package innowise.java.web_store.mapper;
 
 import innowise.java.web_store.dto.request.UserRequest;
 import innowise.java.web_store.dto.response.UserResponse;
-import innowise.java.web_store.entity.UserEntity;
+import innowise.java.web_store.entity.User;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
@@ -18,10 +18,10 @@ import org.mapstruct.ReportingPolicy;
 )
 public interface UserMapper {
 
-    UserEntity toEntity(UserRequest dto);
+    User toEntity(UserRequest dto);
 
-    UserResponse toDTO(UserEntity entity);
+    UserResponse toDTO(User entity);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateEntityFromDTO(UserRequest dto, @MappingTarget UserEntity entity);
+    void updateEntityFromDTO(UserRequest dto, @MappingTarget User entity);
 }
