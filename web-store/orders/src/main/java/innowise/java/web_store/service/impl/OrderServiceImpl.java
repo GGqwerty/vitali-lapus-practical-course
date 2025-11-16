@@ -4,10 +4,13 @@ import innowise.java.web_store.client.UserClient;
 import innowise.java.web_store.dto.request.OrderRequest;
 import innowise.java.web_store.dto.response.OrderResponse;
 import innowise.java.web_store.dto.response.UserResponse;
+import innowise.java.web_store.entity.Item;
 import innowise.java.web_store.entity.Order;
+import innowise.java.web_store.entity.OrderItem;
 import innowise.java.web_store.exception.ApiException;
 import innowise.java.web_store.exception.ApiExceptionType;
 import innowise.java.web_store.mapper.OrderMapper;
+import innowise.java.web_store.repository.ItemRepository;
 import innowise.java.web_store.repository.OrderRepository;
 import innowise.java.web_store.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +27,7 @@ import java.util.List;
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
+    private final ItemRepository itemRepository;
     private final OrderMapper orderMapper;
     private final UserClient userClient;
 
@@ -80,6 +84,13 @@ public class OrderServiceImpl implements OrderService {
     public OrderResponse createOrder(OrderRequest orderRequest) {
         Order order = orderMapper.toEntity(orderRequest);
         Order savedOrder = orderRepository.save(order);
+
+        for (OrderItem oi : order.getOrderItems()) {
+            Item dbItem = itemRepository.findById(oi.getItem().getId())
+                    .orElseThrow(() -> new ApiException(ApiExceptionType.ERR_NOT_FOUND));
+            oi.setItem(dbItem);
+            oi.setOrder(order);
+        }
 
         UserResponse user = userClient.getUserByEmail(savedOrder.getUserId());
         OrderResponse response = orderMapper.toResponse(savedOrder);

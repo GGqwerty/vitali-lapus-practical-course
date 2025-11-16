@@ -25,5 +25,5 @@ public class OrderRequest {
     private String status;
 
     @NotEmpty
-    private List<Long> itemIds;
+    private List<OrderItemRequest> items;
 }

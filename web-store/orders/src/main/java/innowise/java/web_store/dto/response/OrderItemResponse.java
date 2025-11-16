@@ -1,26 +1,20 @@
 package innowise.java.web_store.dto.response;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import java.math.BigDecimal;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class OrderResponse {
-
+public class OrderItemResponse {
     private Long id;
-
-    private UserResponse user;
-
-    private String status;
-
-    private LocalDateTime creationDate;
-
-    private List<OrderItemResponse> items;
+    private String name;
+    private BigDecimal price;
+    private Integer quantity;
 }
