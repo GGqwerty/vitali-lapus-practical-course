@@ -18,3 +18,6 @@ spring:
 keycloak:
   server-url: http://localhost:8081
   realm: web-store
+
+client:
+  user-service-uri: http://users-web-store:8080/api/users/email/{email}

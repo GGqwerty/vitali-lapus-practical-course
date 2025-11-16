@@ -33,4 +33,18 @@
         </createIndex>
     </changeSet>
 
+    <changeSet id="2-replace-userid-with-email" author="Vitaliy">
+        <dropColumn tableName="orders" columnName="user_id"/>
+
+        <addColumn tableName="orders">
+            <column name="user_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <createIndex tableName="orders" indexName="idx_orders_user_id">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+
 </databaseChangeLog>

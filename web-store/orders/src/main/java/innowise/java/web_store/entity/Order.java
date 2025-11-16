@@ -32,7 +32,7 @@ public class Order {
     private Long id;
 
     @Column(name = "user_id", nullable = false)
-    private Long userId;
+    private String userId;
 
     @Column(nullable = false, length = 50)
     private String status;

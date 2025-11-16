@@ -24,4 +24,11 @@
         </createIndex>
     </changeSet>
 
+    <changeSet id="2-unique-items-name" author="Vitaliy">
+        <addUniqueConstraint
+                tableName="items"
+                columnNames="name"
+                constraintName="uk_items_name"/>
+    </changeSet>
+
 </databaseChangeLog>
