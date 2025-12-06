@@ -123,6 +123,19 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: docker
 
+  gateway-web-store:
+    build:
+      context: ../gateway
+      dockerfile: ../gateway/docker/Dockerfile
+    ports:
+      - "8084:8084"
+    depends_on:
+      - keycloak
+    networks:
+      - inno
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+
 volumes:
   postgres-data:
   keycloak_data:

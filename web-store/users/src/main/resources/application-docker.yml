@@ -16,5 +16,5 @@ spring:
     driver-class-name: org.postgresql.Driver
 
 keycloak:
-  server-url: http://localhost:8081
+  server-url: http://keycloak:8081
   realm: web-store

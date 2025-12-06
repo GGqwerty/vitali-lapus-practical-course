@@ -8,4 +8,4 @@ keycloak:
   client-secret: kVFHzOoDtuW8aB2m2CgbW6Z1hy7GYytV
 
 services:
-  user-service-url: http://localhost:8080/api/users
+  user-service-url: http://users-web-store:8080/api/users
