@@ -7,9 +7,11 @@ import innowise.java.web_store.dto.response.TokenResponse;
 import innowise.java.web_store.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -34,5 +36,11 @@ public class AuthController {
     public ResponseEntity<TokenResponse> singUp(@RequestBody SignUpRequest req) {
         TokenResponse token = authService.signUp(req);
         return ResponseEntity.ok(token);
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<Void> deleteUser(@RequestParam String email) {
+        authService.delete(email);
+        return ResponseEntity.noContent().build();
     }
 }

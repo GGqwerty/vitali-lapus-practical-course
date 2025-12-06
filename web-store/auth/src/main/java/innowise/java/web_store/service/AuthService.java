@@ -11,4 +11,6 @@ public interface AuthService {
     TokenResponse signUp(SignUpRequest signUpRequest);
 
     TokenResponse refresh(String token);
+
+    void delete(String email);
 }

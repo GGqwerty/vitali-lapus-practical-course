@@ -11,6 +11,8 @@ spring:
               uri: http://auth-web-store:8082
               predicates:
                 - Path=/api/auth/**
+              filters:
+                - name: SignUpFilter
 
             - id: order
               uri: http://orders-web-store:8083
@@ -32,3 +34,4 @@ spring:
 
 services:
   user-service-url: http://users-web-store:8080/api/users
+  auth-service-url: http://auth-web-store:8082/api/auth

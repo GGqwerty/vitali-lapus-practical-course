@@ -11,6 +11,8 @@ spring:
               uri: http://localhost:8082
               predicates:
                 - Path=/api/auth/**
+              filters:
+                - name: SignUpFilter
 
             - id: order
               uri: http://localhost:8083
@@ -32,3 +34,4 @@ spring:
 
 services:
   user-service-url: http://localhost:8080/api/users
+  auth-service-url: http://localhost:8082/api/auth
