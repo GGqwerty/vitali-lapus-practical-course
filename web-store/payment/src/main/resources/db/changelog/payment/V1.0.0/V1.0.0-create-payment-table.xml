@@ -31,15 +31,15 @@
             </column>
         </createTable>
 
-        <createIndex indexName="idx_payments_order_id" tableName="payments">
+        <createIndex indexName="idx_payment_order_id" tableName="payment">
             <column name="order_id"/>
         </createIndex>
 
-        <createIndex indexName="idx_payments_user_id" tableName="payments">
+        <createIndex indexName="idx_payment_user_id" tableName="payment">
             <column name="user_id"/>
         </createIndex>
 
-        <createIndex indexName="idx_payments_status" tableName="payments">
+        <createIndex indexName="idx_payment_status" tableName="payment">
             <column name="status"/>
         </createIndex>
     </changeSet>
