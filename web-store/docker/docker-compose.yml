@@ -81,6 +81,33 @@ services:
       retries: 5
       start_period: 5s
 
+  zookeeper:
+    image: bitnami/zookeeper:3.9.2
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+
+    kafka:
+      image: bitnami/kafka:3.6.2
+      container_name: kafka
+      ports:
+        - "9092:9092"
+        - "29092:29092"
+      environment:
+        - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+        - KAFKA_LISTENERS=PLAINTEXT://:29092,PLAINTEXT_EXTERNAL://:9092
+        - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:29092,PLAINTEXT_EXTERNAL://localhost:9092
+        - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_EXTERNAL:PLAINTEXT
+        - KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+        - KAFKA_AUTO_CREATE_TOPICS_ENABLE=true
+        - ALLOW_PLAINTEXT_LISTENER=yes
+      depends_on:
+        - zookeeper
+      volumes:
+        - kafka_data:/bitnami/kafka
+
   users-web-store:
     build:
       context: ../users
@@ -139,6 +166,7 @@ services:
 volumes:
   postgres-data:
   keycloak_data:
+  kafka_data:
 
 networks:
   inno:
