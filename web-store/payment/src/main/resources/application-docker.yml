@@ -4,7 +4,7 @@ server:
 spring:
   data:
     mongodb:
-      uri: mongodb://mongo:27017/payment
+      uri: mongodb://admin:secret@mongo:27017/payment?authSource=admin
   liquibase:
     enabled: false
   kafka:

@@ -7,10 +7,11 @@ import innowise.java.web_store.mapper.PaymentMapper;
 import innowise.java.web_store.repository.PaymentRepository;
 import innowise.java.web_store.service.PaymentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;;
+import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -25,7 +26,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     public PaymentResponse createPayment(PaymentRequest dto) {
         Payment payment = paymentMapper.toEntity(dto);
-        payment.setTimestamp(OffsetDateTime.now());
+        payment.setTimestamp(Instant.now());
 
         Integer randomNumber = webClient.get()
                 .uri("/api/v1.0/random?min=1&max=100&count=1")
@@ -45,7 +46,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     public List<PaymentResponse> getPaymentsByOrderId(String orderId) {
-        return paymentRepository.findByOrderId(orderId)
+        return paymentRepository.findByOrderId(Long.valueOf(orderId))
                 .stream()
                 .map(paymentMapper::toDto)
                 .toList();
@@ -69,8 +70,8 @@ public class PaymentServiceImpl implements PaymentService {
         return paymentRepository.findAll().stream()
                 .filter(p -> p.getTimestamp() != null)
                 .filter(p ->
-                        !p.getTimestamp().isBefore(start) &&
-                                !p.getTimestamp().isAfter(end)
+                        !p.getTimestamp().isBefore(start.toInstant()) &&
+                                !p.getTimestamp().isAfter(end.toInstant())
                 )
                 .map(Payment::getPaymentAmount)
                 .filter(Objects::nonNull)

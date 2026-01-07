@@ -11,6 +11,10 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+
 @Mapper(
         componentModel = MappingConstants.ComponentModel.SPRING,
         injectionStrategy = InjectionStrategy.CONSTRUCTOR,
@@ -24,4 +28,16 @@ public interface PaymentMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateEntityFromDto(PaymentRequest dto, @MappingTarget Payment entity);
+
+    default OffsetDateTime map(Instant instant) {
+        return instant == null
+                ? null
+                : OffsetDateTime.ofInstant(instant, ZoneOffset.UTC);
+    }
+
+    default Instant map(OffsetDateTime offsetDateTime) {
+        return offsetDateTime == null
+                ? null
+                : offsetDateTime.toInstant();
+    }
 }
