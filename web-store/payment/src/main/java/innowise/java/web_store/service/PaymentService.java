@@ -11,7 +11,7 @@ public interface PaymentService {
 
     PaymentResponse createPayment(PaymentRequest dto);
 
-    List<PaymentResponse> getPaymentsByOrderId(Long orderId);
+    List<PaymentResponse> getPaymentsByOrderId(String orderId);
 
     List<PaymentResponse> getPaymentsByUserId(Long userId);
 

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreatePaymentEvent {
-    private Long paymentId;
+    private String paymentId;
     private Long orderId;
     private String status;
 }

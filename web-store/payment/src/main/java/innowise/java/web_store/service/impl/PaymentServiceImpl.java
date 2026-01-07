@@ -7,13 +7,13 @@ import innowise.java.web_store.mapper.PaymentMapper;
 import innowise.java.web_store.repository.PaymentRepository;
 import innowise.java.web_store.service.PaymentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Service;;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +23,6 @@ public class PaymentServiceImpl implements PaymentService {
     private final PaymentMapper paymentMapper;
     private final WebClient webClient = WebClient.create("http://www.randomnumberapi.com");
 
-    @Transactional
     public PaymentResponse createPayment(PaymentRequest dto) {
         Payment payment = paymentMapper.toEntity(dto);
         payment.setTimestamp(OffsetDateTime.now());
@@ -45,15 +44,13 @@ public class PaymentServiceImpl implements PaymentService {
         return paymentMapper.toDto(saved);
     }
 
-    @Transactional(readOnly = true)
-    public List<PaymentResponse> getPaymentsByOrderId(Long orderId) {
+    public List<PaymentResponse> getPaymentsByOrderId(String orderId) {
         return paymentRepository.findByOrderId(orderId)
                 .stream()
                 .map(paymentMapper::toDto)
                 .toList();
     }
 
-    @Transactional(readOnly = true)
     public List<PaymentResponse> getPaymentsByUserId(Long userId) {
         return paymentRepository.findByUserId(userId)
                 .stream()
@@ -61,7 +58,6 @@ public class PaymentServiceImpl implements PaymentService {
                 .toList();
     }
 
-    @Transactional(readOnly = true)
     public List<PaymentResponse> getPaymentsByStatuses(List<String> statuses) {
         return paymentRepository.findByStatusIn(statuses)
                 .stream()
@@ -69,8 +65,16 @@ public class PaymentServiceImpl implements PaymentService {
                 .toList();
     }
 
-    @Transactional(readOnly = true)
     public BigDecimal getTotalSumByPeriod(OffsetDateTime start, OffsetDateTime end) {
-        return paymentRepository.getTotalSumByPeriod(start, end);
+        return paymentRepository.findAll().stream()
+                .filter(p -> p.getTimestamp() != null)
+                .filter(p ->
+                        !p.getTimestamp().isBefore(start) &&
+                                !p.getTimestamp().isAfter(end)
+                )
+                .map(Payment::getPaymentAmount)
+                .filter(Objects::nonNull)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
+
 }

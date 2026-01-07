@@ -14,7 +14,7 @@ import java.time.OffsetDateTime;
 @Builder
 public class PaymentResponse {
 
-    private Long id;
+    private String id;
     private Long orderId;
     private Long userId;
     private String status;
