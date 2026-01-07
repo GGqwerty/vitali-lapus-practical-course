@@ -14,3 +14,7 @@ spring:
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver
+
+keycloak:
+  server-url: http://localhost:8081
+  realm: web-store

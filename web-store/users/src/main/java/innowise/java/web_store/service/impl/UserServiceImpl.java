@@ -2,7 +2,7 @@ package innowise.java.web_store.service.impl;
 
 import innowise.java.web_store.dto.request.UserRequest;
 import innowise.java.web_store.dto.response.UserResponse;
-import innowise.java.web_store.entity.UserEntity;
+import innowise.java.web_store.entity.User;
 import innowise.java.web_store.exception.ApiException;
 import innowise.java.web_store.exception.ApiExceptionType;
 import innowise.java.web_store.mapper.UserMapper;
@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public UserResponse create(UserRequest dto) {
-        UserEntity entity = userMapper.toEntity(dto);
+        User entity = userMapper.toEntity(dto);
         return userMapper.toDTO(userRepository.save(entity));
     }
 
@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService {
             @CacheEvict(value = "users", key = "#result.email", condition = "#result != null")
     })
     public UserResponse update(Long id, UserRequest dto) {
-        UserEntity entity = userRepository.findById(id)
+        User entity = userRepository.findById(id)
                 .orElseThrow(() -> new ApiException(ApiExceptionType.ERR_NOT_FOUND));
         userMapper.updateEntityFromDTO(dto, entity);
         return userMapper.toDTO(userRepository.save(entity));

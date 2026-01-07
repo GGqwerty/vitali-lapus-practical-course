@@ -2,8 +2,8 @@ package innowise.java.web_store.service.impl;
 
 import innowise.java.web_store.dto.request.CardInfoRequest;
 import innowise.java.web_store.dto.response.CardInfoResponse;
-import innowise.java.web_store.entity.CardInfoEntity;
-import innowise.java.web_store.entity.UserEntity;
+import innowise.java.web_store.entity.CardInfo;
+import innowise.java.web_store.entity.User;
 import innowise.java.web_store.exception.ApiException;
 import innowise.java.web_store.exception.ApiExceptionType;
 import innowise.java.web_store.mapper.CardInfoMapper;
@@ -29,10 +29,10 @@ public class CardInfoServiceImpl implements CardInfoService {
     @Transactional
     @Override
     public CardInfoResponse create(CardInfoRequest dto) {
-        UserEntity user = userRepository.findById(dto.getUserId())
+        User user = userRepository.findById(dto.getUserId())
                 .orElseThrow(() -> new ApiException(ApiExceptionType.ERR_NOT_FOUND));
 
-        CardInfoEntity entity = cardInfoMapper.toEntity(dto);
+        CardInfo entity = cardInfoMapper.toEntity(dto);
         entity.setUser(user);
 
         return cardInfoMapper.toDTO(cardRepository.save(entity));

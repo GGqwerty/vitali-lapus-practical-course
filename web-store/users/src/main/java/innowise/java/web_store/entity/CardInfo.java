@@ -22,7 +22,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Entity
 @Table(name = "card_info")
-public class CardInfoEntity {
+public class CardInfo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,7 +30,7 @@ public class CardInfoEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    private UserEntity user;
+    private User user;
 
     @Column(nullable = false, length = 20, unique = true)
     private String number;

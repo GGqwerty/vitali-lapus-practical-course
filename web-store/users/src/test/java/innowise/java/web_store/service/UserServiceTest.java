@@ -1,9 +1,9 @@
 package innowise.java.web_store.service;
 
+import innowise.java.web_store.entity.User;
 import innowise.java.web_store.repository.UserRepository;
 import innowise.java.web_store.dto.request.UserRequest;
 import innowise.java.web_store.dto.response.UserResponse;
-import innowise.java.web_store.entity.UserEntity;
 import innowise.java.web_store.exception.ApiException;
 import innowise.java.web_store.mapper.UserMapper;
 import innowise.java.web_store.service.impl.UserServiceImpl;
@@ -33,7 +33,7 @@ class UserServiceTest {
 
     @Test
     void getUserById_found() {
-        UserEntity entity = new UserEntity();
+        User entity = new User();
         entity.setId(1L);
         entity.setEmail("test@example.com");
 
@@ -57,7 +57,7 @@ class UserServiceTest {
 
     @Test
     void getUserByEmail_found() {
-        UserEntity entity = new UserEntity();
+        User entity = new User();
         entity.setId(2L);
         entity.setEmail("email@example.com");
 
@@ -80,14 +80,14 @@ class UserServiceTest {
 
     @Test
     void getAllUsers_withPagination() {
-        UserEntity e1 = new UserEntity();
+        User e1 = new User();
         e1.setId(1L);
-        UserEntity e2 = new UserEntity();
+        User e2 = new User();
         e2.setId(2L);
 
-        List<UserEntity> list = Arrays.asList(e1, e2);
+        List<User> list = Arrays.asList(e1, e2);
         Pageable pageable = PageRequest.of(0, 2, Sort.by("surname").ascending().and(Sort.by("name").ascending()));
-        Page<UserEntity> page = new PageImpl<>(list, pageable, list.size());
+        Page<User> page = new PageImpl<>(list, pageable, list.size());
 
         when(userRepository.findAllByOrderBySurnameAscNameAsc(pageable)).thenReturn(page);
         when(userMapper.toDTO(e1)).thenReturn(new UserResponse(){ { setId(1L); } });
@@ -105,7 +105,7 @@ class UserServiceTest {
         request.setEmail("john@example.com");
         request.setBirthDate(LocalDate.of(1990,1,1));
 
-        UserEntity entity = new UserEntity();
+        User entity = new User();
         entity.setId(1L);
 
         UserResponse response = new UserResponse();
@@ -124,7 +124,7 @@ class UserServiceTest {
         UserRequest request = new UserRequest();
         request.setName("NewName");
 
-        UserEntity entity = new UserEntity();
+        User entity = new User();
         entity.setId(1L);
 
         UserResponse response = new UserResponse();
