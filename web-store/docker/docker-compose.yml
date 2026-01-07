@@ -95,6 +95,20 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: docker
 
+  orders-web-store:
+    build:
+      context: ../orders
+      dockerfile: ../orders/docker/Dockerfile
+    ports:
+      - "8083:8083"
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - inno
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+
   auth-web-store:
     build:
       context: ../auth

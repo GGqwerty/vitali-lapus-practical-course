@@ -1,0 +1,4 @@
+databaseChangeLog:
+  - include:
+      file: orders/V1.0.0/V1.0.0-accumulate-changelog.xml
+      relativeToChangelogFile: true

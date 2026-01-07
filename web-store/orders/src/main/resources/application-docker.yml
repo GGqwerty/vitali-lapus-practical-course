@@ -1,0 +1,23 @@
+server:
+  port: 8083
+
+spring:
+  redis:
+    host: redis
+    port: 6379
+  cache:
+    type: redis
+  liquibase:
+    change-log: db/changelog/changelog-master.yml
+  datasource:
+    url: jdbc:postgresql://postgres:5432/inno
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+keycloak:
+  server-url: http://localhost:8081
+  realm: web-store
+
+client:
+  user-service-uri: http://users-web-store:8080/api/users/email/{email}
