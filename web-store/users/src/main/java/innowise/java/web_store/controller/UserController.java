@@ -20,7 +20,6 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    @PreAuthorize("hasRole('AUTH_SERVICE')")
     public ResponseEntity<UserResponse> createUser(@Validated @RequestBody UserRequest request) {
         UserResponse response = userService.create(request);
         return ResponseEntity.status(201).body(response);

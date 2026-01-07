@@ -163,6 +163,27 @@ public class KeycloakServiceImpl implements KeycloakService {
         }
     }
 
+    @Override
+    public void deleteByEmail(String email) {
+        RealmResource realm = keycloak.realm(keycloakRealm);
+        UsersResource users = realm.users();
+
+        try {
+            List<UserRepresentation> found = users.search(email, true);
+
+            if (found == null || found.isEmpty()) {
+                throw new ApiException(ApiExceptionType.ERR_KEYCLOAK);
+            }
+
+            String userId = found.get(0).getId();
+
+            users.delete(userId);
+
+        } catch (Exception ex) {
+            throw new ApiException(ApiExceptionType.ERR_KEYCLOAK);
+        }
+    }
+
     private HttpEntity<MultiValueMap<String, String>> createTokenRequestEntity(String grantType, String... params) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.valueOf(KeycloakConstants.APPLICATION_FORM_URLENCODED));

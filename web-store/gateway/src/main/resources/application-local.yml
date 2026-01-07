@@ -1,0 +1,37 @@
+server:
+  port: 8084
+
+spring:
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: auth
+              uri: http://localhost:8082
+              predicates:
+                - Path=/api/auth/**
+              filters:
+                - name: SignUpFilter
+
+            - id: order
+              uri: http://localhost:8083
+              predicates:
+                - Path=/api/orders/**
+                - Path=/api/items/**
+
+            - id: users
+              uri: http://localhost:8080
+              predicates:
+                - Path=/api/users/**
+                - Path=/api/cards/**
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:8081/realms/web-store}
+
+services:
+  user-service-url: http://localhost:8080/api/users
+  auth-service-url: http://localhost:8082/api/auth

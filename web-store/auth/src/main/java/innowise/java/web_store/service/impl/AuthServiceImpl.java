@@ -12,12 +12,7 @@ import innowise.java.web_store.keycloak.service.KeycloakService;
 import innowise.java.web_store.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +23,6 @@ import java.util.Map;
 public class AuthServiceImpl implements AuthService {
 
     private final KeycloakService keycloakService;
-    private final RestTemplate restTemplate;
 
     @Value("${services.user-service-url}")
     private String userServiceUrl;
@@ -55,38 +49,6 @@ public class AuthServiceImpl implements AuthService {
                 signUp.getPassword(), attributes);
 
         try {
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-
-            String accessToken = keycloakService.getAccessToken();
-            headers.setBearerAuth(accessToken);
-
-            Map<String, Object> requestBody = new HashMap<>();
-            requestBody.put("email", signUp.getEmail());
-            requestBody.put("name", signUp.getName());
-            requestBody.put("surname", signUp.getSurname());
-            requestBody.put("birthDate", signUp.getBirthDate());
-
-            HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
-
-            ResponseEntity<String> response = restTemplate.postForEntity(userServiceUrl, requestEntity, String.class);
-
-            if (!response.getStatusCode().is2xxSuccessful()) {
-                try {
-                    keycloakService.deleteUser(keycloakUserId);
-                } catch (Exception ignored) {}
-                throw new ApiException(ApiExceptionType.ERR_INTERNAL_ERROR, "UserService вернул ошибку");
-            }
-
-        } catch (Exception exception) {
-            try {
-                keycloakService.deleteUser(keycloakUserId);
-            } catch (Exception ignored) {}
-            throw new ApiException(ApiExceptionType.ERR_INTERNAL_ERROR, "Не удалось создать пользователя");
-        }
-
-
-        try {
             keycloakService.updateUserRoles(keycloakUserId, List.of(), List.of(signUp.getRole()));
         } catch (Exception e) {
             try {
@@ -102,5 +64,10 @@ public class AuthServiceImpl implements AuthService {
         } catch (Exception ignored) {
             throw new NoRollbackApiException("Registered, but not auth");
         }
+    }
+
+    @Override
+    public void delete(String email) {
+        keycloakService.deleteByEmail(email);
     }
 }

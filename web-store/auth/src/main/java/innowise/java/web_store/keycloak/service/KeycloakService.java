@@ -11,6 +11,8 @@ public interface KeycloakService {
 
     void deleteUser(String userId);
 
+    void deleteByEmail(String email);
+
     void updateUserRoles(String userId, List<String> toDelete, List<String> toAdd);
 
     KeycloakToken refresh(String refreshToken);
