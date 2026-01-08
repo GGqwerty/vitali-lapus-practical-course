@@ -17,14 +17,12 @@ spring:
             - id: order
               uri: http://orders-web-store:8083
               predicates:
-                - Path=/api/orders/**
-                - Path=/api/items/**
+                - Path=/api/orders/**,/api/items/**
 
             - id: users
               uri: http://users-web-store:8080
               predicates:
-                - Path=/api/users/**
-                - Path=/api/cards/**
+                - Path=/api/users/**,/api/cards/**
 
   security:
     oauth2:

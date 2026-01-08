@@ -14,6 +14,18 @@ spring:
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver
+  kafka:
+    bootstrap-servers: kafka:29092
+    consumer:
+      group-id: payment-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
 keycloak:
   server-url: http://keycloak:8081

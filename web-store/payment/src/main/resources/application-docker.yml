@@ -1,22 +1,14 @@
 server:
-  port: 8083
+  port: 8085
 
 spring:
-  redis:
-    host: localhost
-    port: 6379
-  cache:
-    type: redis
+  data:
+    mongodb:
+      uri: mongodb://admin:secret@mongo:27017/payment?authSource=admin
   liquibase:
-    enabled: true
-    change-log: db/changelog/changelog-master.yml
-  datasource:
-    url: jdbc:postgresql://localhost:5432/inno
-    username: postgres
-    password: postgres
-    driver-class-name: org.postgresql.Driver
+    enabled: false
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: kafka:29092
     consumer:
       group-id: payment-group
       auto-offset-reset: earliest
@@ -29,8 +21,8 @@ spring:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
 keycloak:
-  server-url: http://localhost:8081
+  server-url: http://keycloak:8081
   realm: web-store
 
 client:
-  user-service-uri: http://localhost:8080/api/users/email/{email}
+  user-service-uri: http://users-web-store:8080/api/users/email/{email}

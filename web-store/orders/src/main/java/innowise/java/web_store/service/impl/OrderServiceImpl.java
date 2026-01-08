@@ -1,6 +1,7 @@
 package innowise.java.web_store.service.impl;
 
 import innowise.java.web_store.client.UserClient;
+import innowise.java.web_store.dto.event.CreateOrderEvent;
 import innowise.java.web_store.dto.request.OrderRequest;
 import innowise.java.web_store.dto.response.OrderResponse;
 import innowise.java.web_store.dto.response.UserResponse;
@@ -9,6 +10,7 @@ import innowise.java.web_store.entity.Order;
 import innowise.java.web_store.entity.OrderItem;
 import innowise.java.web_store.exception.ApiException;
 import innowise.java.web_store.exception.ApiExceptionType;
+import innowise.java.web_store.kafka.producer.OrderEventProducer;
 import innowise.java.web_store.mapper.OrderMapper;
 import innowise.java.web_store.repository.ItemRepository;
 import innowise.java.web_store.repository.OrderRepository;
@@ -20,6 +22,7 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -30,6 +33,8 @@ public class OrderServiceImpl implements OrderService {
     private final ItemRepository itemRepository;
     private final OrderMapper orderMapper;
     private final UserClient userClient;
+
+    private final OrderEventProducer orderEventProducer;
 
     @Override
     @Transactional(readOnly = true)
@@ -85,16 +90,22 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderMapper.toEntity(orderRequest);
         Order savedOrder = orderRepository.save(order);
 
+        BigDecimal paymentAmount = new BigDecimal(0);
+
         for (OrderItem oi : order.getOrderItems()) {
             Item dbItem = itemRepository.findById(oi.getItem().getId())
                     .orElseThrow(() -> new ApiException(ApiExceptionType.ERR_NOT_FOUND));
             oi.setItem(dbItem);
             oi.setOrder(order);
+            paymentAmount = paymentAmount.add(dbItem.getPrice().multiply(BigDecimal.valueOf(oi.getQuantity())));
         }
 
         UserResponse user = userClient.getUserByEmail(savedOrder.getUserId());
         OrderResponse response = orderMapper.toResponse(savedOrder);
         response.setUser(user);
+
+        orderEventProducer.sendOrderEvent(new CreateOrderEvent(response.getId(), response.getUser().getId(), paymentAmount));
+
         return response;
     }
 
@@ -125,5 +136,17 @@ public class OrderServiceImpl implements OrderService {
             throw new ApiException(ApiExceptionType.ERR_NOT_FOUND);
         }
         orderRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "orders", key = "#id"),
+    })
+    public void updateOrderStatus(Long id, String status) {
+        Order order = orderRepository.findById(id).orElseThrow(() ->
+                new ApiException(ApiExceptionType.ERR_NOT_FOUND));
+        order.setStatus(status);
+        orderRepository.save(order);
     }
 }

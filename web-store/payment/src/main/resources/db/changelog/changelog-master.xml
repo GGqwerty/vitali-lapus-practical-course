@@ -1,0 +1,14 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:mongodb="http://www.liquibase.org/xml/ns/dbchangelog-ext/mongodb"
+        xsi:schemaLocation="
+        http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.21.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext/mongodb
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <include file="payment/V1.0.0/V1.0.0-create-payment-collection.xml"
+             relativeToChangelogFile="true"/>
+
+</databaseChangeLog>
