@@ -35,6 +35,7 @@ public class SecurityConfig {
         http
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(ex -> ex
+                        .pathMatchers("/actuator/health/liveness", "/actuator/health/readiness").permitAll()
                         .pathMatchers("/api/auth/delete/**").denyAll()
                         .pathMatchers(HttpMethod.POST, "/api/users").denyAll()
                         .pathMatchers("/api/users").hasRole("ADMIN")
