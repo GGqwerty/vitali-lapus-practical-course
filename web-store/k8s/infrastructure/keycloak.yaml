@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keycloak
+  namespace: inno
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: keycloak
+  template:
+    metadata:
+      labels:
+        app: keycloak
+    spec:
+      containers:
+        - name: keycloak
+          image: bitnamilegacy/keycloak:26.2.4
+          ports:
+            - containerPort: 8081
+            - containerPort: 8443
+          envFrom:
+            - secretRef:
+                name: app-secrets
+          env:
+            - name: KEYCLOAK_DATABASE_HOST
+              value: keycloak-postgres
+            - name: KEYCLOAK_DATABASE_NAME
+              value: keycloak
+            - name: KEYCLOAK_HTTPS_PORT
+              value: "8443"
+            - name: KEYCLOAK_HTTP_PORT
+              value: "8081"
+            - name: KEYCLOAK_DATABASE_HOST
+              value: keycloak-postgres
+            - name: KEYCLOAK_DATABASE_PORT
+              value: "5432"
+            - name: KEYCLOAK_DATABASE_NAME
+              value: "keycloak"
+            - name: KEYCLOAK_EXTRA_ARGS
+              value: --import-realm --verbose --health-enabled=true
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: keycloak
+  namespace: inno
+spec:
+  ports:
+    - port: 8081
+      name: http
+    - port: 8443
+      name: https
+  selector:
+    app: keycloak
